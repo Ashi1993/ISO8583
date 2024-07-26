@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="TCPProxy" startOnLoad="true" transports="tcp" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log category="INFO" level="full">
+                <property name="---###---receiving through tcp---###---" value="......"/>
+            </log>
+            <property name="iso8583Payload" scope="default" type="STRING" value="$ctx:messageValue"/>
+        </inSequence>
+        <outSequence>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>

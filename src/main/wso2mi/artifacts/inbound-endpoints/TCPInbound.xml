@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inboundEndpoint name="TCPInbound" class="org.wso2.carbon.inbound.iso8583.listening.ISO8583MessageConsumer" onError="fault" sequence="TCPInboundSequence" suspend="false" xmlns="http://ws.apache.org/ns/synapse">
+    <parameters>
+        <parameter name="coordination">true</parameter>
+        <parameter name="sequential">true</parameter>
+        <parameter name="interval">1000</parameter>
+        <parameter name="inbound.behavior">listening</parameter>
+        <parameter name="port">4000</parameter>
+        <parameter name="isProxy">false</parameter>
+    </parameters>
+</inboundEndpoint>

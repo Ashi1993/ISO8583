@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence xmlns="http://ws.apache.org/ns/synapse" name="TCPInboundSequence" onError="fault">
+    <log level="full">
+        <property name="Log_Message for ISO8583 Inbound Endpoint" value="Message received from sample1-source"/>
+    </log>
+    <property name="iso8583Payload" scope="default" type="STRING" expression="$body//ISOMessage"/>
+    <log level="full">
+        <property name="iso8583Payload" expression="get-property('iso8583Payload')"/>
+    </log>
+    <class name="org.wso2.iso.mediator.ISO8583Mediator"></class>
+    <log level="full">
+        <property name="Log_Message for ISO8583 Inbound Endpoint" value="Message received from Mediator"/>
+    </log>
+    <dataMapperConnector.iso8583To20022>
+        <Result>iso20022xml</Result>
+        <isoJsonInput>{$ctx:ISO8583Payload}</isoJsonInput>
+    </dataMapperConnector.iso8583To20022>
+    <log level="custom">
+        <property scope="axis2" name="###ISO20022###" expression="$ctx:iso20022xml"/>
+    </log>
+    <property name="iso20022Payload" scope="default" type="STRING" expression="$ctx:iso20022xml"/>
+    <!--payloadFactory media-type="xml">
+        <format>
+            <Document>$1</Document>
+        </format>
+        <args>
+            <arg evaluator="xml" expression="get-property('iso8583Payload')"/>
+        </args>
+    </payloadFactory-->
+</sequence>
