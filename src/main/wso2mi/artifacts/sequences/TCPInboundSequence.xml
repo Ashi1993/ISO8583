@@ -15,16 +15,33 @@
         <Result>iso20022xml</Result>
         <isoJsonInput>{$ctx:ISO8583Payload}</isoJsonInput>
     </dataMapperConnector.iso8583To20022>
-    <log level="custom">
-        <property scope="axis2" name="###ISO20022###" expression="$ctx:iso20022xml"/>
-    </log>
     <property name="iso20022Payload" scope="default" type="STRING" expression="$ctx:iso20022xml"/>
-    <!--payloadFactory media-type="xml">
-        <format>
-            <Document>$1</Document>
-        </format>
-        <args>
-            <arg evaluator="xml" expression="get-property('iso8583Payload')"/>
-        </args>
-    </payloadFactory-->
+    <log level="custom">
+        <property name="###ISO20022###" expression="get-property('iso20022Payload')"/>
+    </log>
+    <filter source="get-property('iso20022Payload')" regex=".*FIToFICstmrCdtTrf>">
+        <then>
+            <payloadFactory media-type="xml">
+                <format>
+                    <Document>$1</Document>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('iso20022Payload')"/>
+                </args>
+            </payloadFactory>
+        </then>
+        <else>
+            <payloadFactory media-type="xml">
+                <format>
+                    <Error>
+                        <ErrorCode>invalid_request</ErrorCode>
+                        <ErrorMessage>$1</ErrorMessage>
+                    </Error>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('iso20022Payload')"/>
+                </args>
+            </payloadFactory>
+        </else>
+    </filter>
 </sequence>

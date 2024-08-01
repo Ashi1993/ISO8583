@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="fault" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <log level="custom">
+        <property name="text" value="An unexpected error occured"/>
+        <property name="code" expression="get-property('ERROR_CODE')"/>
+        <property name="message" expression="get-property('ERROR_MESSAGE')"/>
+    </log>
+    <payloadFactory media-type="xml">
+        <format>
+            <Error>
+                <ErrorCode>$1</ErrorCode>
+                <ErrorMessage>$2</ErrorMessage>
+            </Error>
+        </format>
+        <args>
+            <arg evaluator="xml" expression="get-property('ERROR_CODE')"/>
+            <arg evaluator="xml" expression="get-property('ERROR_MESSAGE')"/>
+        </args>
+    </payloadFactory>
+</sequence>
